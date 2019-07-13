@@ -4,7 +4,9 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -15,11 +17,15 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email')
-            ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
-                'mapped' => false,
+            ->add('email', EmailType::class , [
+                'attr'=>[
+                    'class'=>'form-control form-control-user',
+                    'placeholder'=>'Email Address',
+                ],
+                'label' => false
+            ])
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter a password',
@@ -31,7 +37,20 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
+                'invalid_message' => 'The password fields must match.',
+                'required' => true,
+                'first_options'  => [ 'label'=>false ,'attr'=>[ 'class' => 'form-control form-control-user', 'placeholder'=>'Repeat Password'] ],
+                'second_options' => [  'label'=>false ,'attr'=>[ 'class' => 'form-control form-control-user', 'placeholder'=>'Password'] ],
             ])
+//            ->add('termsAccepted', CheckboxType::class, [
+//                'mapped' => false,
+//                'constraints' => new IsTrue(),
+//                'attr'=>[
+//                    'style'=>'width:20px; display:inline',
+//                    'class'=>'form-control',
+//                ],
+//                'label' => false
+//            ])
         ;
     }
 
