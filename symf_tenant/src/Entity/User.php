@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -35,6 +37,20 @@ class User implements UserInterface
      */
     private $password;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserTenant" ,mappedBy="user", fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $userTenants;
+
+    public function __construct()
+    {
+        $this->userTenants = new ArrayCollection();
+    }
+
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -50,6 +66,14 @@ class User implements UserInterface
         $this->email = $email;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|UserTenant[]
+     */
+    public function getUserTenants(): Collection
+    {
+        return $this->userTenants;
     }
 
     /**
@@ -112,4 +136,5 @@ class User implements UserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
 }

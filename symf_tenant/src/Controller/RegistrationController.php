@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\UserTenant;
 use App\Form\RegistrationFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,17 +27,22 @@ class RegistrationController extends AbstractController
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $form->get('password')->getData()
                 )
             );
 
+            $tenant = new UserTenant();
+            $tenant->setUser($user);
+            $tenant->setTenantId(rand(999999,100000000));
+
             $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($tenant);
             $entityManager->persist($user);
             $entityManager->flush();
 
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('_profiler');
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('registration/register.html.twig', [

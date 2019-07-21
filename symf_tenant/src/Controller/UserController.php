@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\UserTenant;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Repository\UserTenantRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,13 +31,20 @@ class UserController extends AbstractController
     /**
      * @Route("/new", name="user_new", methods={"GET","POST"})
      */
-    public function new(Request $request,UserPasswordEncoderInterface $encoder): Response
+    public function new(
+        Request $request,
+        UserPasswordEncoderInterface $encoder,
+        UserTenantRepository $userTenantRepository
+    ): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $userTenant = new UserTenant();
+            $userTenant->setUser($user);
+            $userTenant->setTenantId(uniqid());
 
             $encoded = $encoder->encodePassword($user, $request->request->get('password'));
             $user->setPassword($encoded);

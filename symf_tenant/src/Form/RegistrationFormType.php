@@ -39,8 +39,8 @@ class RegistrationFormType extends AbstractType
                 ],
                 'invalid_message' => 'The password fields must match.',
                 'required' => true,
-                'first_options'  => [ 'label'=>false ,'attr'=>[ 'class' => 'form-control form-control-user', 'placeholder'=>'Repeat Password'] ],
-                'second_options' => [  'label'=>false ,'attr'=>[ 'class' => 'form-control form-control-user', 'placeholder'=>'Password'] ],
+                'first_options'  => [ 'label'=>false ,'attr'=>[ 'class' => 'form-control form-control-user', 'placeholder'=>' Password'] ],
+                'second_options' => [  'label'=>false ,'attr'=>[ 'class' => 'form-control form-control-user', 'placeholder'=>'Repeat Password'] ],
             ])
 //            ->add('termsAccepted', CheckboxType::class, [
 //                'mapped' => false,

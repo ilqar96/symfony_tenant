@@ -16,10 +16,22 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a>
-                    <a class="dropdown-item" href="#">Change company</a>
+                    <a class="dropdown-item" href="{{ path('new_company') }}">Add new Company</a>
                     <a class="dropdown-item" href="{{ path('user_new') }}">Add new user</a>
                 </div>
             </li>
+
+            <li class="nav-item dropdown ml-auto">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Companys
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for key , company in app.user.userTenants %}
+                        <a class="dropdown-item" href="{{ path('change_tenant',{id:company.tenantId}) }}" >{{ loop.index }} Company</a>
+                    {% endfor %}
+                </div>
+            </li>
+
         </ul>
     </div>
 </nav>

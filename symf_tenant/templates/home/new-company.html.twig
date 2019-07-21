@@ -1,0 +1,21 @@
+{% extends 'home-base.html.twig' %}
+
+{% block title %}New User{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-6 offset-3">
+                <h1>Create new Company</h1>
+
+                <form action="" method="POST">
+                    <input type="text" class="form-control" name="companyName" placeholder="Company name">
+
+                    <submit class="btn btn-primary w-100 mt-4" >Add</submit>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
