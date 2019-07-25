@@ -33,8 +33,7 @@ class UserController extends AbstractController
      */
     public function new(
         Request $request,
-        UserPasswordEncoderInterface $encoder,
-        UserTenantRepository $userTenantRepository
+        UserPasswordEncoderInterface $encoder
     ): Response
     {
         $user = new User();
@@ -42,14 +41,18 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $session = $request->getSession();
+
+
             $userTenant = new UserTenant();
             $userTenant->setUser($user);
-            $userTenant->setTenantId(uniqid());
+            $userTenant->setTenantId( $session->get('tenantId'));
 
             $encoded = $encoder->encodePassword($user, $request->request->get('password'));
             $user->setPassword($encoded);
 
             $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($userTenant);
             $entityManager->persist($user);
             $entityManager->flush();
 
