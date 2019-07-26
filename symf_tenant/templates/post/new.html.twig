@@ -3,9 +3,15 @@
 {% block title %}New Post{% endblock %}
 
 {% block body %}
-    <h1>Create new Post</h1>
+   <div class="container">
+       <h1>Create new Post</h1>
 
-    {{ include('post/_form.html.twig') }}
+       <div class="row">
+           <div class="col-6 offset-3">
+               {{ include('post/_form.html.twig') }}
+               <a href="{{ path('posts') }}" class="btn btn-secondary w-100 mt-2">back to list</a>
+           </div>
+       </div>
 
-    <a href="{{ path('post_index') }}">back to list</a>
+   </div>
 {% endblock %}

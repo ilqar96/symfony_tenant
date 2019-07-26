@@ -41,6 +41,11 @@ class Post
      */
     private $deleted = false;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $tenantId;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -102,6 +107,18 @@ class Post
     public function setDeleted(bool $deleted): self
     {
         $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    public function getTenantId(): ?int
+    {
+        return $this->tenantId;
+    }
+
+    public function setTenantId(int $tenantId): self
+    {
+        $this->tenantId = $tenantId;
 
         return $this;
     }

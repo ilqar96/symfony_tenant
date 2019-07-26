@@ -29,12 +29,12 @@ class PostController extends AbstractController
     /**
      * @Route("/home", name="posts", methods={"GET"})
      */
-    public function companyPosts(PostRepository $postRepository): Response
+    public function companyPosts(PostRepository $postRepository,Request $request): Response
     {
-//        $posts = $postRepository->findBy(['user'=>])
+        $posts = $postRepository->findBy(['tenantId'=>$request->getSession()->get('tenantId')]);
 
         return $this->render('post/posts.html.twig', [
-            'posts' => $postRepository->findAll(),
+            'posts' => $posts,
         ]);
     }
 
@@ -51,15 +51,14 @@ class PostController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setCreatedAt(new \DateTime());
             $post->setAuthor($this->getUser());
-
-
+            $post->setTenantId($request->getSession()->get('tenantId'));
 
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post);
             $entityManager->flush();
 
-            return $this->redirectToRoute('post_index');
+            return $this->redirectToRoute('posts');
         }
 
         return $this->render('post/new.html.twig', [

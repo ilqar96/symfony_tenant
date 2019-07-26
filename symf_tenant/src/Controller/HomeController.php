@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\UserTenant;
+use App\Repository\UserRepository;
 use App\Repository\UserTenantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -56,14 +57,23 @@ class HomeController extends AbstractController
     }
 
 
-
-
     /**
      * @Route("/tenant/change/{id}", name="change_tenant")
      */
-    public function changeTenant($id,SessionInterface $session)
+    public function changeTenant($id,SessionInterface $session,UserRepository $userRepository)
     {
-        $session->set('tenantId', $id);
+        $user = $this->getUser();
+        $tenants = [];
+
+        foreach ($user->getUserTenants() as $tenant){
+            $tenants[] = $tenant->getTenantId();
+        }
+
+        if (in_array($id,$tenants)){
+            $session->set('tenantId', $id);
+        }else{
+            $session->set('tenantId', $tenants[0]);
+        }
 
         return $this->redirectToRoute('home');
     }
